@@ -1,0 +1,87 @@
+<h2>Employee Information</h2>
+<table>
+  <tr>
+    <td>Emp no:</td>
+    <td *ngIf="isEditable"> <!-- *ngIf="isEditable" basically an if statement to check if the boolean value created in emp.component.ts is true or not -->
+      <!-- input [(ngModel)] directive ngmodel to edit/take input from user--> 
+          <div class="form-group">
+          <input required [(ngModel)]="empno" type="text"
+          name="empno" id="empno" #inputEmpno="ngModel" maxlength="6" minlength="2">
+          </div> <!-- this is a div of the emp no-->
+          <div [hidden]="inputEmpno.valid || inputEmpno.pristine" class="alert alert-danger">
+            Empno should not be less than 2 characters
+          </div> <!-- this is a div that hides the error message/or displays where necessary-->
+    </td>
+    <td *ngIf="!isEditable">{{empno}}</td> <!-- if is not editable (! means not) (false) -->
+    <td><button (click)="toggleEditFields()"> <!-- on click to ensure the function is called-->
+      {{((isEditable)?"Save":"Edit")}}</button></td> <!-- so that the button changes save/edit depending on true or false-->
+  </tr>
+  <tr>
+    <td>Name:</td>
+    <!-- <td *ngIf="isEditable"><input [(ngModel)]="name"></td>
+       directive ngmodel to edit/take input from user --> 
+    <td *ngIf="isEditable">
+    <div class="form-group">
+        <input required [(ngModel)]="name" type="text"
+        name="name" id="name" #inputName="ngModel" maxlength="10" minlength="3">
+    </div>
+    <div [hidden]="inputName.valid || inputName.pristine" class="alert alert-danger">
+          Name should not be less than 3 characters
+    </div>
+    </td>
+    <td *ngIf="!isEditable">{{name | uppercase | summary}}</td>
+    </tr>
+    <tr>
+    <td>Department:</td>
+    <td *ngIf="isEditable">
+        <div class="form-group">
+            <input required [(ngModel)]="department" type="text"
+            name="department" id="department" #inputDepartment="ngModel" maxlength="35" minlength="3">
+        </div>
+        <div [hidden]="inputDepartment.valid || inputDepartment.pristine" class="alert alert-danger">
+              Department should not be less than 3 characters
+        </div>
+        </td>
+        <td *ngIf="!isEditable">{{department | summary:8}}</td>
+    </tr>
+  <tr>
+      <td>Joining Date:</td>
+      <td *ngIf="isEditable"><input [(ngModel)]="joiningDate" type="date"></td> <!-- directive ngmodel to edit/take input from user--> 
+      <td *ngIf="!isEditable">{{joiningDate | date:"dd-MMMM-yy, hh:mm:ss"}}</td>
+  </tr>
+  <tr>
+        <td>Band Color:</td>
+        <td *ngIf="isEditable"><input [(ngModel)]="bandColor" type="color"></td> <!-- directive ngmodel to edit/take input from user--> 
+        <td *ngIf="!isEditable" bgColor="{{bandColor}}">       </td>
+  </tr>
+</table>
+<h2>Project Details</h2>
+<table>
+  <tr>
+    <th>Number</th>
+    <th>Name</th>
+    <th>Location</th>
+    <th><button (click)="showProjectForm()">+</button></th>
+  </tr>
+ <!-- <tr *ngFor="let p of projects |slice:0:3 ; let i=index"> (slice 3 means show top 3 projects) -->
+    <tr *ngFor="let p of projects ; let i=index">
+    <td>{{p.projectid}}</td>
+    <td>{{p.name}}</td>
+    <td>{{p.location}}</td>
+    <td><button (click) ="deleteProject(i)">x</button></td>
+  </tr>
+</table>
+
+<form (submit)="addNewProject({projectid:pid.value,name:pname.value,location:ploc.value})" *ngIf="isAddingProject">
+<tr>
+  <td><input placeholder="Number" size="8" #pid required value="0"></td> <!-- '#pid' to use any HTML element in Angular we use #<id> -->
+  <td><input placeholder="Name" size="8" #pname></td>
+  <td><input placeholder="Location" size="8" #ploc></td>
+  <td><input type ="submit" value="Add"></td>
+  <td>
+      <div [hidden]="isvalidProject" class="alert alert-danger">
+          {{message}}
+      </div>
+  </td>
+</tr>
+</form>  
